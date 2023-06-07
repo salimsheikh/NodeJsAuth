@@ -7,3 +7,7 @@ npm run devStart
 npm i bcrypt
 
 npm i passport passport-local express-session express-flash
+
+npm i method-override
+
+//https://www.youtube.com/watch?v=c6zI1gCaO-c

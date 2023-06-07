@@ -10,6 +10,7 @@ const passport = require("passport");
 const initializePassport = require("./passport-config");
 const flash = require("express-flash");
 const session = require("express-session");
+const methodOverride = require("method-override");
 
 initializePassport(
   passport,
@@ -33,6 +34,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(methodOverride("_method"));
+
 // Configuring the register post functionality
 app.post(
   "/login",
@@ -54,9 +57,9 @@ app.post("/register", async (req, res) => {
       password: hashedPassword,
     });
     console.log(users); // Display newly registered in the console
-    res.redirect("/register");
+    //res.redirect("/register");
 
-    // res.redirect("/login");
+    res.redirect("/login");
   } catch (e) {
     console.log(e);
     res.redirect("/register");
@@ -64,18 +67,38 @@ app.post("/register", async (req, res) => {
 });
 
 /*Routes Start */
-app.get("/", (req, res) => {
-  //res.send("Hello there");
-  res.render("index.ejs");
+app.get("/", checkAuthenticated, (req, res) => {
+  res.render("index.ejs", { name: req.user.name });
 });
 
-app.get("/login", (req, res) => {
+app.get("/login", checkNotAuthenticated, (req, res) => {
   res.render("login.ejs");
 });
 
-app.get("/register", (req, res) => {
+app.get("/register", checkNotAuthenticated, (req, res) => {
   res.render("register.ejs");
 });
 /*Routes End */
+
+app.delete("/logout", (req, res) => {
+  req.logout(req.user, (err) => {
+    if (err) return next(err);
+    res.redirect("/");
+  });
+});
+
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/login");
+}
+
+function checkNotAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return res.redirect("/");
+  }
+  next();
+}
 
 app.listen(3000);
