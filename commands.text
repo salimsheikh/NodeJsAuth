@@ -1,0 +1,9 @@
+npm init
+
+npm i express ejs
+
+npm run devStart
+
+npm i bcrypt
+
+npm i passport passport-local express-session express-flash
