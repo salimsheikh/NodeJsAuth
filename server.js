@@ -56,9 +56,6 @@ app.post("/register", async (req, res) => {
       email: req.body.email,
       password: hashedPassword,
     });
-    console.log(users); // Display newly registered in the console
-    //res.redirect("/register");
-
     res.redirect("/login");
   } catch (e) {
     console.log(e);
@@ -80,7 +77,7 @@ app.get("/register", checkNotAuthenticated, (req, res) => {
   res.render("register.ejs");
 });
 
-/* logout redirect if get method | GET  */
+/* logout redirect if GET method */
 app.get("/logout", (req, res) => {
   res.redirect("/login");
 });
