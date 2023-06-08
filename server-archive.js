@@ -67,7 +67,6 @@ app.post("/register", async (req, res) => {
 });
 
 /*Routes Start */
-
 app.get("/", checkAuthenticated, (req, res) => {
   res.render("index.ejs", { name: req.user.name });
 });
@@ -78,16 +77,6 @@ app.get("/login", checkNotAuthenticated, (req, res) => {
 
 app.get("/register", checkNotAuthenticated, (req, res) => {
   res.render("register.ejs");
-});
-
-/* logout redirect if get method | GET  */
-app.get("/logout", (req, res) => {
-  res.redirect("/login");
-});
-
-app.get("/*", (req, res) => {
-  /* not found page */
-  res.render("not-found-404.ejs");
 });
 /*Routes End */
 
